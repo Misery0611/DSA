@@ -1,23 +1,22 @@
 //Misery
-//Print all permutations of sequence from 1 to n (a number user enter)
+//Print all arrangements of k numbers derived from the sequence from 1 to n
 #include <iostream>
 
-bool *gUsed = NULL;
-int n;
-int *gResult = NULL;
+bool* gUsed = NULL;
+int* gResult = NULL;
+int n, k;
+
 /***********************************************************************************************************************
  *PROTOTYPE
- *
  **********************************************************************************************************************/
 /**
- * {void} printPermutations(int i)
- * @brief      { Fill in the given index or print result array }
+ * @brief      { Fill in the i-th position of the result array or print it }
  *
  * @param[int]  i     { Index number }
  */
-void printPermutations(int i);
+void printArrange(int i);
 /**
- * @brief      { Print result array }
+ * @brief      { Print the result array }
  */
 void printArr();
 /***********************************************************************************************************************
@@ -26,16 +25,15 @@ void printArr();
 int main()
 {
     //Gets data
-    std::cin >> n;
+    std::cin >> n >> k;
 
     gUsed = new bool[n];
     gResult = new int[n];
-    //Initialize value
     for (int i = 0; i < n; i++)
     {
         gUsed[i] = false;
     }
-    printPermutations(0);
+    printArrange(0);
 
     //Release memory
     delete[] gUsed;
@@ -44,20 +42,21 @@ int main()
     gResult = NULL;
 }
 
-void printPermutations(int i)
+void printArrange(int i)
 {
-    if (i >= n)
+    if (i == k)
     {
         printArr();
         return;
     }
+
     for (int j = 0; j < n; j++)
     {
         if (gUsed[j] == false)
         {
             gResult[i] = j + 1;
             gUsed[j] = true;
-            printPermutations(i + 1);
+            printArrange(i + 1);
             gUsed[j] = false;
         }
     }
@@ -65,7 +64,7 @@ void printPermutations(int i)
 
 void printArr()
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < k; i++)
     {
         std::cout << gResult[i] << ' ';
     }

@@ -1,23 +1,21 @@
 //Misery
-//Print all permutations of sequence from 1 to n (a number user enter)
+//Print all ways to choose k numbers derived from sequence from 1 to n (does not care about order)
 #include <iostream>
 
-bool *gUsed = NULL;
-int n;
-int *gResult = NULL;
+bool* gUsed = NULL;
+int* gResult = NULL;
+int n, k, curMax = 0;
 /***********************************************************************************************************************
  *PROTOTYPE
- *
  **********************************************************************************************************************/
 /**
- * {void} printPermutations(int i)
- * @brief      { Fill in the given index or print result array }
+ * @brief      { Fill in the i-th position of the result array or print it }
  *
  * @param[int]  i     { Index number }
  */
-void printPermutations(int i);
+void printComb(int i);
 /**
- * @brief      { Print result array }
+ * @brief      { Print the result array }
  */
 void printArr();
 /***********************************************************************************************************************
@@ -26,38 +24,49 @@ void printArr();
 int main()
 {
     //Gets data
-    std::cin >> n;
+    std::cin >> n >> k;
 
-    gUsed = new bool[n];
     gResult = new int[n];
+    gUsed = new bool[n];
     //Initialize value
     for (int i = 0; i < n; i++)
     {
         gUsed[i] = false;
     }
-    printPermutations(0);
+    printComb(0);
 
     //Release memory
     delete[] gUsed;
     gUsed = NULL;
-    delete[] gResult;
+    delete gResult;
     gResult = NULL;
 }
 
-void printPermutations(int i)
+void printComb(int i)
 {
-    if (i >= n)
+    if (i >= k)
     {
         printArr();
         return;
     }
-    for (int j = 0; j < n; j++)
+
+    //Only check value greater than previous value
+    for (int j = curMax; j < n; j++)
     {
         if (gUsed[j] == false)
         {
             gResult[i] = j + 1;
+            curMax = j + 1;
             gUsed[j] = true;
-            printPermutations(i + 1);
+            printComb(i + 1);
+            if (i > 0)
+            {
+                curMax = gResult[i - 1];
+            }
+            else
+            {
+                curMax = 0;
+            }
             gUsed[j] = false;
         }
     }
@@ -65,7 +74,7 @@ void printPermutations(int i)
 
 void printArr()
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < k; i++)
     {
         std::cout << gResult[i] << ' ';
     }
