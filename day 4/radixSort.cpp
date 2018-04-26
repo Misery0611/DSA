@@ -41,8 +41,11 @@ void radixSort(int* arr, size_t size);
  **************************************************************************************************/
 int main()
 {
+    //Initialize array
     int arr[MAX_SIZE] = {4, 1, 9, 7, 10, 3, 5, 2, 8, 6};
+    //Call the sort function
     radixSort(arr, MAX_SIZE);
+    //Show the sorted array
     for (int i = 0; i < MAX_SIZE; i++)
     {
         std::cout << arr[i] << ' ';
@@ -65,17 +68,22 @@ int getMax(const int* arr, size_t size)
 
 void countingSort(int* arr, int* temp, int* count, size_t size, int exp)
 {
+    //Copy data to the temporary array
     memmove(temp, arr, size * sizeof(int));
+    //Set all value of the count array to zero
     memset(count, 0, 10 * sizeof(int));
 
+    //Calculate frequencies
     for (int i = 0; i < 10; i++)
     {
         count[(arr[i] / exp) % 10]++;
     }
+    //Transform to frequencies to the true position
     for (int i = 1; i < 10; i++)
     {
         count[i] += count[i - 1];
     }
+    //Build the sorted array
     for (size_t i = size; i-- > 0;)
     {
         arr[count[(temp[i] / exp) % 10] - 1] = temp[i];
@@ -85,13 +93,18 @@ void countingSort(int* arr, int* temp, int* count, size_t size, int exp)
 
 void radixSort(int* arr, size_t size)
 {
+    //Gets the maximum value
     int max = getMax(arr, size);
+    //Create a temporary array for counting sort
     int* temp = new int[size];
+    //Create a auxiliary array for counting sort
     int* count = new int[10];
+    //Sort digit by digit
     for (int exp = 1; max / exp > 0; exp *= 10)
     {
         countingSort(arr, temp, count, size, exp);
     }
+    //Release memories
     delete[] temp;
     temp = NULL;
     delete[] count;
